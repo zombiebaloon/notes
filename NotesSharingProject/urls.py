@@ -35,7 +35,15 @@ urlpatterns = [
     path('uploadnotes',uploadnotes,name='uploadnotes'),
     path('viewmynotes',viewmynotes,name='viewmynotes'),
     path('delete_mynotes(?P<int:id>)',Delete_Mynotes,name='delete_mynotes'),
-    path('viewallnotesuser',viewallnotesuser,name='viewallnotesuser')
+    path('viewallnotesuser',viewallnotesuser,name='viewallnotesuser'),
+    path('viewsusers',viewusers,name='viewusers'),
+    path('delete_user(?P<int:id>)',delete_user,name='delete_user'),
+    path('viewallnotes',viewallnotes,name='viewallnotes'),
+    path('assign_status(?P<int:id>)',assign_status,name='assign_status'),
+    path('accepted_notes',accepted_notes,name='accepted_notes'),
+    path('rejected_notes',rejected_notes,name='rejected_notes'),
+    path('pending_notes',pending_notes,name='pending_notes'),
+    
 ]
 
 if settings.DEBUG:

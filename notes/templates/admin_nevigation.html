@@ -21,14 +21,14 @@
     <li class="navbar-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">VIEW NOTES</a>
       <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">PENDING</a>
-          <a class="dropdown-item" href="#">ACCEPTED</a>
-          <a class="dropdown-item" href="#">REJECTED</a>
-          <a class="dropdown-item" href="#">ALL NOTES</a>
+          <a class="dropdown-item" href="{% url 'pending_notes' %}">PENDING</a>
+          <a class="dropdown-item" href="{% url 'accepted_notes' %}">ACCEPTED</a>
+          <a class="dropdown-item" href="{% url 'rejected_notes' %}">REJECTED</a>
+          <a class="dropdown-item" href="{% url 'viewallnotes' %}">ALL NOTES</a>
       </div>
     </li>
     <li class="navbar-item">
-      <a class="nav-link" href="#">VIEW USERS</a>
+      <a class="nav-link" href="{% url 'viewusers' %}">VIEW USERS</a>
     </li>
     <li class="navbar-item">
       <a class="nav-link" href="{% url 'Logout' %}">LOGOUT</a>

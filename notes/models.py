@@ -22,5 +22,5 @@ class Notes(models.Model):
     description = models.CharField(max_length=100,null=True)
     status = models.CharField(max_length=15)
 
-    def __str__(self):
-        return self.signup.user.username+''+self.status
+    #def __str__(self):
+        #return self.user.username

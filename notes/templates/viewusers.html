@@ -1,0 +1,35 @@
+{% extends 'admin_nevigation.html' %}
+{% load static %}
+{% block body %}
+
+<center><h2 style="font-family: 'Monotype Corsiva';color: #E6120E;font-weight: bold;margin-top: 5%;">View my notes</h2></center><hr>
+<div class="container" style= "margin-top:5%"></div>
+<div class="container">
+    <table class="table table-borderd" id="mytable">
+        <thead>
+            <tr>
+                <th>Sr. No</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Username</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in user %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.first_name}} {{i.last_name}}</td>
+                <td>
+                    {{i.role}}
+                </td>
+                <td>{{i.username}}</td>
+                <td>
+                    <a href="{% url 'delete_user' i.id %}"><button class="btn btn-danger" onclick="return confirm('Are You Sure?')">Delete</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

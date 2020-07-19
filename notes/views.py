@@ -73,11 +73,29 @@ def signup1(request):
 def admin_home(request):
     if not request.user.is_staff:
         return redirect('login_admin')
-    return render(request,'admin_home.html')
+    allnotes = Notes.objects.all()
+    apnotes = Notes.objects.filter(status__exact='approved')
+    rnotes = Notes.objects.filter(status__exact='rejected')
+    pnotes = Notes.objects.filter(status__exact='pending')
+    ap = 0
+    a = 0
+    p = 0
+    r = 0
+    for i in rnotes:
+        r += 1
+    for i in pnotes:
+        p += 1
+    for i in apnotes:
+        ap += 1
+    for i in allnotes:
+        a += 1
+    d = {'a':a,'ap':ap,'p':p,'r':r}
+
+    return render(request,'admin_home.html',d)
 
 def Logout(request):
     logout(request)
-    return redirect('login_admin')
+    return redirect('index')
 
 
 def profile(request): 
@@ -155,7 +173,8 @@ def viewmynotes(request):
     if not request.user.is_authenticated:
         return redirect('Login')
     user = User.objects.get(id=request.user.id)
-    notes = Notes.objects.filter(user=user)
+    notes = Notes.objects.filter(status__exact='pending',user=user)
+
     d = {'notes':notes}
     return render(request,'viewmynotes.html',d)
 
@@ -166,10 +185,78 @@ def Delete_Mynotes(request, id):
         notes = Notes.objects.get(id=id)
         notes.delete()
         message1 = messages.info(request,'Notes Deleted')
-        return redirect('viewmynotes')    
+        return redirect('viewallnotes')    
 def viewallnotesuser(request):
     if not request.user.is_authenticated:
         redirect('Login')
+    
+    apnotes = Notes.objects.filter(status__exact='approved')
+    d = {'apnotes':apnotes}
+    return render(request,'viewallnotesuser.html',d)
+
+
+def viewusers(request):
+    if not request.user.is_staff:
+        return redirect('login_admin')
+    user = User.objects.all()[1:]
+    d = {"user":user}
+    return render(request,'viewusers.html',d)
+
+def delete_user(request,id):
+    if not request.user.is_staff:
+        return redirect('login_admin')
+    if User.objects.filter(id=id).exists():
+
+        user = User.objects.get(id=id)
+        user.delete()
+        message1 = messages.info(request,'User Deleted')
+        return redirect('viewusers')
+
+def viewallnotes(request):
+    if not request.user.is_staff:
+        return redirect('login_admin')
+    user = User.objects.get(id=request.user.id)
     notes = Notes.objects.all()
     d = {'notes':notes}
-    return render(request,'viewallnotesuser.html',d)
+    return render(request,'viewallnotes.html',d)
+
+def assign_status(request,id):
+    if not request.user.is_staff:
+        return redirect('login_admin')
+    error = ''
+    notes = Notes.objects.get(id=id)
+    if request.method == 'POST':
+        s = request.POST['status']
+        notes.status=s
+        try:
+            notes.save()
+            error = 'no'
+            return redirect('viewallnotes')
+        except:
+            error = 'yes'
+        
+        #redirect('viewallnotes')
+    d = {'error':error}
+    return render(request,'assign_status.html')
+
+def accepted_notes(request):
+    if not request.user.is_staff:
+        return redirect('login_admin')
+    #user = User.objects.get(id=request.user.id)
+    apnotes = Notes.objects.filter(status__exact='approved')
+    d = {'apnotes':apnotes}
+    return render(request,'accepted_notes.html',d)
+def rejected_notes(request):
+    if not request.user.is_staff:
+        return redirect('login_admin')
+    #user = User.objects.get(id=request.user.id)
+    apnotes = Notes.objects.filter(status__exact='rejected')
+    d = {'apnotes':apnotes}
+    return render(request,'rejected_notes.html',d)
+def pending_notes(request):
+    if not request.user.is_staff:
+        return redirect('login_admin')
+    #user = User.objects.get(id=request.user.id)
+    apnotes = Notes.objects.filter(status__exact='pending')
+    d = {'apnotes':apnotes}
+    return render(request,'pending_notes.html',d)
